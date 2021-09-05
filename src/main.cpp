@@ -11,7 +11,7 @@ void setup()
 {
     static ApplicationConfig appConfig;
 
-    appConfig.firmwareVersion = VersionNumber{ 1, 0, 4 };
+    appConfig.firmwareVersion = VersionNumber{ 1, 1, 0 };
 
     appConfig.blynk.appToken = Config::Blynk::AppToken;
     appConfig.blynk.serverHostName = Config::Blynk::ServerHostName;
@@ -21,6 +21,11 @@ void setup()
     appConfig.logging.syslog.hostName = Config::Logging::SyslogHostName;
     appConfig.logging.syslog.serverHostName = Config::Logging::SyslogServerHost;
     appConfig.logging.syslog.serverPort = Config::Logging::SyslogServerPort;
+
+    appConfig.mqtt.brokerIp = Config::Mqtt::BrokerIp;
+    appConfig.mqtt.brokerPort = Config::Mqtt::BrokerPort;
+    appConfig.mqtt.enabled = true;
+    appConfig.mqtt.id = Config::Mqtt::Id;
 
     appConfig.persistence.Size = 8;
 

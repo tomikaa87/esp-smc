@@ -8,6 +8,9 @@
 
 #include <CoreApplication.h>
 #include <Logger.h>
+#include <network/MQTT/MqttVariable.h>
+
+class MqttClient;
 
 class Smc
 {
@@ -27,4 +30,15 @@ private:
     Blynk _blynk;
 
     void onBlynkUpdateNeeded();
+
+    struct Mqtt {
+        Mqtt(MqttClient& mqttClient)
+            : currentTemperature{ PSTR("smc/temp/current"), mqttClient }
+        {}
+
+        MqttVariable<float> currentTemperature;
+    } _mqtt;
+
+    void setupMqtt();
+    void updateMqtt();
 };
