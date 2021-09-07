@@ -5,6 +5,7 @@
 
 namespace Config
 {
+    constexpr auto DeviceCount = 2;
 
     namespace Pins
     {
