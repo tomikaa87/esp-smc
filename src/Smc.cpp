@@ -33,27 +33,25 @@ void Smc::onBlynkUpdateNeeded()
 void Smc::setupMqtt()
 {
     for (unsigned i = 0; i < Config::DeviceCount; ++i) {
-        _mqtt.shutterUps[i] = false;
-        _mqtt.shutterDowns[i] = false;
+        _mqtt.shutters[i] = false;
 
-        _mqtt.shutterUps[i].setChangedHandler([this, i](const bool v) {
-            _relayController.pulse(i * 2);
-            _mqtt.shutterUps[i] = false;
-        });
+        _mqtt.shutters[i].setChangedHandler([this, i](const int v) {
+            const auto relayIndex =
+                v > 0
+                    ? i * 2         // 'open' relay
+                    : i * 2 + 1;    // 'close' relay
 
-        _mqtt.shutterDowns[i].setChangedHandler([this, i](const bool v) {
-            _relayController.pulse(i * 2 + 1);
-            _mqtt.shutterDowns[i] = false;
+            _relayController.pulse(relayIndex);
         });
     }
 
-    _mqtt.upTimerTime.setChangedHandler([this](const int v) {
+    _mqtt.openTimerTime.setChangedHandler([this](const int v) {
         _settings.data.ShutterOpenHour = v / 60;
         _settings.data.ShutterOpenMinute = v - _settings.data.ShutterOpenHour * 60;
         _settings.save();
     });
 
-    _mqtt.downTimerTime.setChangedHandler([this](const int v) {
+    _mqtt.closeTimerTime.setChangedHandler([this](const int v) {
         _settings.data.ShutterCloseHour = v / 60;
         _settings.data.ShutterCloseMinute = v - _settings.data.ShutterCloseHour * 60;
         _settings.save();
@@ -65,6 +63,6 @@ void Smc::setupMqtt()
 void Smc::updateMqtt()
 {
     _mqtt.currentTemperature = _temperatureSensor.read() / 100.f;
-    _mqtt.upTimerTime = _settings.data.ShutterOpenHour * 60 + _settings.data.ShutterOpenMinute;
-    _mqtt.downTimerTime = _settings.data.ShutterCloseHour * 60 + _settings.data.ShutterCloseMinute;
+    _mqtt.openTimerTime = _settings.data.ShutterOpenHour * 60 + _settings.data.ShutterOpenMinute;
+    _mqtt.closeTimerTime = _settings.data.ShutterCloseHour * 60 + _settings.data.ShutterCloseMinute;
 }

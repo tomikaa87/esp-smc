@@ -35,24 +35,19 @@ private:
 
     struct Mqtt {
         Mqtt(MqttClient& mqttClient)
-            : currentTemperature{ PSTR("smc/temp/current"), mqttClient }
-            , shutterUps{
-                MqttVariable<bool>{ PSTR("smc/shutter/1/up"), PSTR("smc/shutter/1/up/set"), mqttClient },
-                MqttVariable<bool>{ PSTR("smc/shutter/2/up"), PSTR("smc/shutter/2/up/set"), mqttClient }
+            : currentTemperature{ PSTR("home/temperature/bedroom"), mqttClient }
+            , shutters{
+                MqttVariable<int>{ PSTR("home/shutters/bedroom/door/state/get"), PSTR("home/shutters/bedroom/door/state/set"), mqttClient },
+                MqttVariable<int>{ PSTR("home/shutters/bedroom/window/state/get"), PSTR("home/shutters/bedroom/window/state/set"), mqttClient }
             }
-            , shutterDowns{
-                MqttVariable<bool>{ PSTR("smc/shutter/1/down"), PSTR("smc/shutter/1/down/set"), mqttClient },
-                MqttVariable<bool>{ PSTR("smc/shutter/2/down"), PSTR("smc/shutter/2/down/set"), mqttClient }
-            }
-            , upTimerTime{ PSTR("smc/timer/up"), PSTR("smc/timer/up/set"), mqttClient }
-            , downTimerTime{ PSTR("smc/timer/down"), PSTR("smc/timer/down/set"), mqttClient }
+            , openTimerTime{ PSTR("home/shutters/bedroom/timer/open/get"), PSTR("home/shutters/bedroom/timer/open/set"), mqttClient }
+            , closeTimerTime{ PSTR("home/shutters/bedroom/timer/close/get"), PSTR("home/shutters/bedroom/timer/close/get"), mqttClient }
         {}
 
         MqttVariable<float> currentTemperature;
-        std::array<MqttVariable<bool>, 2> shutterUps;
-        std::array<MqttVariable<bool>, 2> shutterDowns;
-        MqttVariable<int> upTimerTime;
-        MqttVariable<int> downTimerTime;
+        std::array<MqttVariable<int>, Config::DeviceCount> shutters;
+        MqttVariable<int> openTimerTime;
+        MqttVariable<int> closeTimerTime;
     } _mqtt;
 
     void setupMqtt();
