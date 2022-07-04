@@ -41,7 +41,7 @@ private:
                 MqttVariable<int>{ PSTR("home/shutters/bedroom/window/state/get"), PSTR("home/shutters/bedroom/window/state/set"), mqttClient }
             }
             , openTimerTime{ PSTR("home/shutters/bedroom/timer/open/get"), PSTR("home/shutters/bedroom/timer/open/set"), mqttClient }
-            , closeTimerTime{ PSTR("home/shutters/bedroom/timer/close/get"), PSTR("home/shutters/bedroom/timer/close/get"), mqttClient }
+            , closeTimerTime{ PSTR("home/shutters/bedroom/timer/close/get"), PSTR("home/shutters/bedroom/timer/close/set"), mqttClient }
         {}
 
         MqttVariable<float> currentTemperature;
