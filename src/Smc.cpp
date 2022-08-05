@@ -1,4 +1,7 @@
 #include "Smc.h"
+#include "Utils.h"
+
+#include <sstream>
 
 Smc::Smc(const ApplicationConfig& appConfig)
     : _appConfig(appConfig)
@@ -51,6 +54,45 @@ void Smc::setupMqtt()
 
             _relayController.pulse(relayIndex);
         });
+
+        const auto makeButtonConfig = [](
+            const bool open,
+            PGM_P name,
+            PGM_P buttonId,
+            PGM_P commandTopic
+        ) {
+            std::stringstream config;
+
+            config << '{';
+            config << R"("icon":)" << (open ? R"("mdi:window-shutter-open")" : R"("mdi:window-shutter")");
+            config << R"(,"name":")" << Utils::pgmToStdString(name) << (open ? " Open" : " Close") << '"';
+            config << R"(,"object_id":"smc_)" << Utils::pgmToStdString(buttonId) << (open ? "_open" : "_close") << '"';
+            config << R"(,"unique_id":"smc_)" << Utils::pgmToStdString(buttonId) << (open ? "_open" : "_close") << '"';
+            config << R"(,"command_topic":")" << Utils::pgmToStdString(commandTopic) << '"';
+            config << R"(,"payload_press":")" << (open ? "1" : "0") << '"';
+            config << '}';
+
+            return config.str();
+        };
+
+        static const std::array<std::tuple<PGM_P, PGM_P, PGM_P>, Config::DeviceCount> CommandButtons{
+            std::tuple<PGM_P, PGM_P, PGM_P>{ PSTR("Bedroom Door"), PSTR("bedroom_door"), PSTR("home/shutters/bedroom/door/state/set") },
+            std::tuple<PGM_P, PGM_P, PGM_P>{ PSTR("Bedroom Window"), PSTR("bedroom_window"), PSTR("home/shutters/bedroom/window/state/set") },
+        };
+
+        _mqtt.closeButtonConfigs[i] = makeButtonConfig(
+            false,
+            std::get<0>(CommandButtons[i]),
+            std::get<1>(CommandButtons[i]),
+            std::get<2>(CommandButtons[i])
+        );
+
+        _mqtt.openButtonConfigs[i] = makeButtonConfig(
+            true,
+            std::get<0>(CommandButtons[i]),
+            std::get<1>(CommandButtons[i]),
+            std::get<2>(CommandButtons[i])
+        );
     }
 
     _mqtt.openTimerTime.setChangedHandler([this](const int v) {
