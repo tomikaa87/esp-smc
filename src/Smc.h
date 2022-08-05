@@ -29,9 +29,11 @@ private:
     RelayController _relayController;
     TemperatureSensor _temperatureSensor;
     Automator _automator;
-    Blynk _blynk;
 
+#ifdef IOT_ENABLE_BLYNK
+    Blynk _blynk;
     void onBlynkUpdateNeeded();
+#endif
 
     struct Mqtt {
         Mqtt(MqttClient& mqttClient)

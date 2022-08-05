@@ -20,6 +20,8 @@
 
 #pragma once
 
+#ifdef IOT_ENABLE_BLYNK
+
 #include "Config.h"
 
 #include <Logger.h>
@@ -66,3 +68,5 @@ private:
     void updateTimerPin();
     void updatePins();
 };
+
+#endif

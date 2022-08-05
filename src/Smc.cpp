@@ -5,12 +5,16 @@ Smc::Smc(const ApplicationConfig& appConfig)
     , _coreApplication(_appConfig)
     , _settings(_coreApplication.settings())
     , _automator(_coreApplication.systemClock(), _settings, _relayController)
+#ifdef IOT_ENABLE_BLYNK
     , _blynk(_coreApplication.blynkHandler(), _settings, _relayController)
+#endif
     , _mqtt(_coreApplication.mqttClient())
 {
     Logger::setup(_appConfig, _coreApplication.systemClock());
 
+#ifdef IOT_ENABLE_BLYNK
     _coreApplication.setBlynkUpdateHandler([this]{ onBlynkUpdateNeeded(); });
+#endif
 
     setupMqtt();
     _coreApplication.setMqttUpdateHandler([this]{ updateMqtt(); });
@@ -22,13 +26,17 @@ void Smc::task()
     _relayController.task();
     _temperatureSensor.task();
     _automator.task();
+#ifdef IOT_ENABLE_BLYNK
     _blynk.task();
+#endif
 }
 
+#ifdef IOT_ENABLE_BLYNK
 void Smc::onBlynkUpdateNeeded()
 {
     _blynk.updateRoomTemperature(_temperatureSensor.read());
 }
+#endif
 
 void Smc::setupMqtt()
 {

@@ -18,6 +18,8 @@
     Created on 2020-12-21
 */
 
+#ifdef IOT_ENABLE_BLYNK
+
 #include "Blynk.h"
 #include "RelayController.h"
 #include "Settings.h"
@@ -216,3 +218,5 @@ void Blynk::updatePins()
         Variant{ _settings.data.ShutterTimerActive ? 1 : 0 }
     );
 }
+
+#endif
