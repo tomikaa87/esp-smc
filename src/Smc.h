@@ -42,22 +42,12 @@ private:
                 MqttVariable<int>{ PSTR("home/shutters/bedroom/door/state/get"), PSTR("home/shutters/bedroom/door/state/set"), mqttClient },
                 MqttVariable<int>{ PSTR("home/shutters/bedroom/window/state/get"), PSTR("home/shutters/bedroom/window/state/set"), mqttClient }
             }
-            , openButtonConfigs{
-                MqttVariable<std::string>{ PSTR("homeassistant/button/smc_bedroom_door_open/config"), mqttClient },
-                MqttVariable<std::string>{ PSTR("homeassistant/button/smc_bedroom_window_open/config"), mqttClient },
-            }
-            , closeButtonConfigs{
-                MqttVariable<std::string>{ PSTR("homeassistant/button/smc_bedroom_door_close/config"), mqttClient },
-                MqttVariable<std::string>{ PSTR("homeassistant/button/smc_bedroom_window_close/config"), mqttClient },
-            }
             , openTimerTime{ PSTR("home/shutters/bedroom/timer/open/get"), PSTR("home/shutters/bedroom/timer/open/set"), mqttClient }
             , closeTimerTime{ PSTR("home/shutters/bedroom/timer/close/get"), PSTR("home/shutters/bedroom/timer/close/set"), mqttClient }
         {}
 
         MqttVariable<float> currentTemperature;
         std::array<MqttVariable<int>, Config::DeviceCount> shutters;
-        std::array<MqttVariable<std::string>, Config::DeviceCount> openButtonConfigs;
-        std::array<MqttVariable<std::string>, Config::DeviceCount> closeButtonConfigs;
         MqttVariable<int> openTimerTime;
         MqttVariable<int> closeTimerTime;
     } _mqtt;
