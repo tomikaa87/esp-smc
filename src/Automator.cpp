@@ -77,7 +77,7 @@ void Automator::checkShutterSchedule()
 
 void Automator::openShutters()
 {
-    _log.info("Opening shutters");
+    _log.info_P(PSTR("Opening shutters"));
 
     _relayController.pulse(0);
     _relayController.pulse(2);
@@ -85,7 +85,7 @@ void Automator::openShutters()
 
 void Automator::closeShutters()
 {
-    _log.info("Closing shutters");
+    _log.info_P(PSTR("Closing shutters"));
 
     _relayController.pulse(1);
     _relayController.pulse(3);

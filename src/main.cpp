@@ -11,7 +11,7 @@ void setup()
 {
     static ApplicationConfig appConfig;
 
-    appConfig.firmwareVersion = VersionNumber{ 1, 3, 2 };
+    appConfig.firmwareVersion = VersionNumber{ 1, 4, 0 };
 
 #ifdef IOT_ENABLE_BLYNK
     appConfig.blynk.appToken = Config::Blynk::AppToken;
@@ -33,8 +33,10 @@ void setup()
 
     appConfig.persistence.Size = 8;
 
+#ifdef IOT_ENABLE_HTTP_OTA_UPDATE
     appConfig.otaUpdate.updateCheckIntervalMs = 60000;
     appConfig.otaUpdate.updateUrl = Config::OtaUpdate::FirmwareUpdateUrl;
+#endif
     appConfig.otaUpdate.arduinoOtaPasswordHash = Config::OtaUpdate::ArduinoOtaPasswordHash;
 
     appConfig.wifi.password = Config::WiFi::Password;

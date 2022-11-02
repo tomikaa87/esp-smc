@@ -132,7 +132,7 @@ void Blynk::setupHandlers()
         VirtualPins::Timer::Active,
         [this](const int, const Variant& value) {
             _settings.data.ShutterTimerActive = static_cast<int>(value) ? 1 : 0;
-            _log.debug("timer state changed: enabled=%d", _settings.data.ShutterTimerActive);
+            _log.debug_P(PSTR("timer state changed: enabled=%d"), _settings.data.ShutterTimerActive);
         }
     );
 
@@ -172,13 +172,13 @@ void Blynk::handleTimerInputChange(const TimeInputParam& param)
 {
     if (!param.hasStartTime())
     {
-        _log.warning("Shutter open time input has no start time");
+        _log.warning_P(PSTR("Shutter open time input has no start time"));
         return;
     }
 
     if (!param.hasStopTime())
     {
-        _log.warning("Shutter open time input has no stop time");
+        _log.warning_P(PSTR("Shutter open time input has no stop time"));
         return;
     }
 

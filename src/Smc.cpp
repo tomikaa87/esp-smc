@@ -64,14 +64,41 @@ void Smc::setupMqtt()
     ) {
         std::stringstream config;
 
-        config << '{';
-        config << R"("icon":)" << (open ? R"("mdi:window-shutter-open")" : R"("mdi:window-shutter")");
-        config << R"(,"name":")" << Utils::pgmToStdString(name) << (open ? " Open" : " Close") << '"';
-        config << R"(,"object_id":"smc_)" << Utils::pgmToStdString(buttonId) << (open ? "_open" : "_close") << '"';
-        config << R"(,"unique_id":"smc_)" << Utils::pgmToStdString(buttonId) << (open ? "_open" : "_close") << '"';
-        config << R"(,"command_topic":")" << Utils::pgmToStdString(commandTopic) << '"';
-        config << R"(,"payload_press":")" << (open ? "1" : "0") << '"';
-        config << '}';
+        config 
+            << '{'
+            << Utils::pgmToStdString(PSTR(R"("icon":)")) 
+            << (open
+                ? Utils::pgmToStdString(PSTR(R"("mdi:window-shutter-open")"))
+                : Utils::pgmToStdString(PSTR(R"("mdi:window-shutter")"))
+            )
+            << Utils::pgmToStdString(PSTR(R"(,"name":")"))
+            << Utils::pgmToStdString(name)
+            << (open
+                ? Utils::pgmToStdString(PSTR(" Open"))
+                : Utils::pgmToStdString(PSTR(" Close"))
+            )
+            << '"'
+            << Utils::pgmToStdString(PSTR(R"(,"object_id":"smc_)"))
+            << Utils::pgmToStdString(buttonId)
+            << (open
+                ? Utils::pgmToStdString(PSTR("_open"))
+                : Utils::pgmToStdString(PSTR("_close"))
+            ) 
+            << '"'
+            << Utils::pgmToStdString(PSTR(R"(,"unique_id":"smc_)"))
+            << Utils::pgmToStdString(buttonId)
+            << (open
+                ? Utils::pgmToStdString(PSTR("_open"))
+                : Utils::pgmToStdString(PSTR("_close"))
+            )
+            << '"'
+            << Utils::pgmToStdString(PSTR(R"(,"command_topic":")"))
+            << Utils::pgmToStdString(commandTopic)
+            << '"'
+            << Utils::pgmToStdString(PSTR(R"(,"payload_press":")"))
+            << (open ? "1" : "0")
+            << '"'
+            << '}';
 
         return config.str();
     };

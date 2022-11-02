@@ -14,7 +14,7 @@ RelayController::RelayController()
 
     for (const auto pin : Config::Pins::Relay)
     {
-        _log.debug("Setting up GPIO%d for relay %u", pin, i);
+        _log.debug_P(PSTR("Setting up GPIO%d for relay %u"), pin, i);
 
         ::pinMode(pin, OUTPUT);
         setState(i, false);
@@ -25,14 +25,14 @@ RelayController::RelayController()
 
 void RelayController::switchOn(const uint8_t relay) const
 {
-    _log.debug("Switching on relay %u", relay);
+    _log.debug_P(PSTR("Switching on relay %u"), relay);
 
     setState(relay, true);
 }
 
 void RelayController::switchOff(const uint8_t relay) const
 {
-    _log.debug("Switching off relay %u", relay);
+    _log.debug_P(PSTR("Switching off relay %u"), relay);
 
     setState(relay, false);
 }
@@ -44,32 +44,32 @@ void RelayController::setState(const uint8_t relay, const bool on) const
 
     if (on && isAnyRelayInTheSameGroupTurnedOn(relay))
     {
-        _log.warning("Relay %u can't be turned on, another one in the same group is already active", relay);
+        _log.warning_P(PSTR("Relay %u can't be turned on, another one in the same group is already active"), relay);
         return;
     }
 
-    _log.debug("Setting state of relay %u to %s", relay, (on ? "On" : "Off"));
+    _log.debug_P(PSTR("Setting state of relay %u to %s"), relay, (on ? "On" : "Off"));
 
     ::digitalWrite(Config::Pins::Relay[relay], on ? 1 : 0);
 }
 
 void RelayController::toggle(const uint8_t relay) const
 {
-    _log.debug("Toggling relay %u", relay);
+    _log.debug_P(PSTR("Toggling relay %u"), relay);
 
     setState(relay, isRelayTurnedOn(relay) ? false : true);
 }
 
 void RelayController::pulse(const uint8_t relay)
 {
-    _log.debug("Pulsing relay %u", relay);
+    _log.debug_P(PSTR("Pulsing relay %u"), relay);
 
     if (!isValidRelayIndex(relay))
         return;
 
     if (m_pulseStates[relay])
     {
-        _log.warning("Relay %u is already being pulsed", relay);
+        _log.warning_P(PSTR("Relay %u is already being pulsed"), relay);
         return;
     }
 
@@ -108,7 +108,7 @@ bool RelayController::isValidRelayIndex(const uint8_t relay) const
 {
     if (relay >= sizeof(Config::Pins::Relay))
     {
-        _log.warning("Invalid relay index: %u", relay);
+        _log.warning_P(PSTR("Invalid relay index: %u"), relay);
         return false;
     }
 
